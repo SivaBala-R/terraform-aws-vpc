@@ -26,13 +26,14 @@ resource "aws_subnet" "public" {
     map_public_ip_on_launch = true
 
     tags = merge(
-        var.public_subnet_cidrs,
+        var.public_subnet_tags,
         local.common_tags,
         {
             Name = "${local.common_name}-public-${split("-",local.az_names[count.index])[2]}"
         }
     )
 }
+
 resource "aws_subnet" "private" {
     count = length(var.private_subnet_cidrs)
     vpc_id = aws_vpc.main.id
@@ -48,6 +49,7 @@ resource "aws_subnet" "private" {
         }
     )
 }
+
 resource "aws_subnet" "database" {
     count = length(var.database_subnet_cidrs)
     vpc_id = aws_vpc.main.id
@@ -124,7 +126,7 @@ resource "aws_eip" "nat" {
 
   tags = merge(
     var.eip_tags,
-    local.common_name,
+    local.common_tags,
     {
         Name = "${local.common_name}-nat"
     }
