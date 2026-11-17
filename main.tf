@@ -139,7 +139,7 @@ resource "aws_nat_gateway" "main" {
 
   tags = merge(
     var.nat_gateway_tags,
-    local.common_name
+    local.common_tags
   )
 
   depends_on = [ aws_internet_gateway.main ]
